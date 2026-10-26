@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="An interactive exploded 3D view of a Onewheel GT: what each part does, how it connects, and how to upgrade it.">
-<title>Onewheel GT Teardown</title>
+<meta name="description" content="An interactive exploded 3D view of a Onewheel: what each part does, how it connects, and how to upgrade it. Covers Pint, Pint X, Pint S, XR, GT and GT S-Series.">
+<title>Onewheel Teardown</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -43,10 +43,9 @@
   color-scheme: dark;
 }
 html, body { height: 100%; }
-body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body { margin: 0; }
 
 .app { height: 100%; display: grid; grid-template-rows: auto 1fr; gap: 12px; padding-inline: 16px; padding-block: 12px 16px; }
 .bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; }
@@ -54,12 +53,16 @@ body { margin: 0; }
 .brand h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; letter-spacing: 0.01em; line-height: 1; text-transform: uppercase; }
 .brand p { margin: 0; color: var(--muted); font-size: 0.85rem; }
 .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.models { display: flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.models button { font: 500 0.8rem var(--font-body); background: transparent; color: var(--ink); border: 0; border-right: 1px solid var(--line); padding: 6px 10px; cursor: pointer; }
+.models button:last-child { border-right: 0; }
+.models button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
 .slider { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-.slider input { width: 150px; accent-color: var(--accent); }
+.slider input { width: 140px; accent-color: var(--accent); }
 .btn { font: 500 0.82rem var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
 .btn:hover { border-color: var(--accent); }
 .btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.btn:focus-visible, .chip:focus-visible, .plist button:focus-visible, .callout:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn:focus-visible, .chip:focus-visible, .plist button:focus-visible, .callout:focus-visible, .models button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .main { display: grid; grid-template-columns: minmax(0, 1fr) 390px; gap: 12px; min-height: 0; }
 .viewport { position: relative; background: var(--stage); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-height: 0; touch-action: none; }
@@ -70,7 +73,7 @@ body { margin: 0; }
 .callout.dim { opacity: 0.3; }
 .tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); font: 500 0.78rem var(--font-body); padding: 4px 8px; border-radius: 4px; white-space: nowrap; transform: translate(12px, -130%); }
 .hint { position: absolute; left: 12px; bottom: 10px; font: 0.72rem var(--font-mono); color: var(--muted); pointer-events: none; }
-.stamp { position: absolute; right: 12px; top: 10px; font: 0.7rem var(--font-mono); color: var(--muted); text-align: right; pointer-events: none; letter-spacing: 0.04em; }
+.stamp { position: absolute; right: 12px; top: 10px; font: 0.7rem var(--font-mono); color: var(--muted); text-align: right; pointer-events: none; letter-spacing: 0.04em; text-transform: uppercase; }
 
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--surface); z-index: 1; }
@@ -82,6 +85,11 @@ body { margin: 0; }
 .detail h3 { margin: 0 0 4px; font: 500 0.7rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .detail p, .detail ul, .detail ol { margin: 0; max-width: 65ch; }
 .detail ul, .detail ol { padding-left: 1.2em; display: grid; gap: 4px; }
+.specs { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.specs th { text-align: left; font: 500 0.7rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 5px 8px 5px 0; width: 40%; vertical-align: top; }
+.specs td { padding: 5px 0; font-variant-numeric: tabular-nums; border-top: 1px solid var(--line); }
+.specs th { border-top: 1px solid var(--line); }
+.small { color: var(--muted); font-size: 0.8rem; }
 .dhead { display: flex; align-items: center; gap: 10px; }
 .num { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 500 0.85rem var(--font-mono); }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -101,7 +109,9 @@ body { margin: 0; }
 .plist button.dim { opacity: 0.45; }
 .plist .n { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--ink); display: grid; place-items: center; font: 500 0.7rem var(--font-mono); }
 .plist .s { display: block; color: var(--muted); font-size: 0.78rem; line-height: 1.3; }
-.foot { padding: 0 16px 16px; color: var(--muted); font-size: 0.78rem; }
+.foot { padding: 0 16px 16px; color: var(--muted); font-size: 0.78rem; display: grid; gap: 6px; }
+.foot p { margin: 0; }
+.foot a { color: var(--accent); }
 .err { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--muted); }
 
 @media (max-width: 860px) {
@@ -109,7 +119,7 @@ body { margin: 0; }
   .main { grid-template-columns: minmax(0, 1fr); }
   .viewport { height: 58vh; min-height: 340px; }
   .panel { overflow: visible; }
-  .slider input { width: 120px; }
+  .slider input { width: 110px; }
 }
 @media (prefers-reduced-motion: reduce) { .callout { transition: none; } }
 </style>
@@ -119,10 +129,11 @@ body { margin: 0; }
 <div class="app">
   <header class="bar">
     <div class="brand">
-      <h1>Onewheel GT Teardown</h1>
-      <p>Click any part to see what it does and how you can upgrade it.</p>
+      <h1>Onewheel Teardown</h1>
+      <p>Pick a model, then click any part to see what it does and how to upgrade it.</p>
     </div>
     <div class="controls">
+      <div class="models" id="models" role="group" aria-label="Onewheel model"></div>
       <label class="slider" for="explode">Assembled <input id="explode" type="range" min="0" max="100" value="70"> Exploded</label>
       <button class="btn" id="toggleExplode" type="button">Assemble</button>
       <button class="btn" id="spin" type="button" aria-pressed="false">Auto-rotate</button>
@@ -133,7 +144,7 @@ body { margin: 0; }
     <div class="viewport" id="viewport">
       <div id="callouts"></div>
       <div class="tip" id="tip" hidden></div>
-      <div class="stamp">SIMPLIFIED MODEL · UNITS: INCHES<br>TIRE 11.5 × 6.5–6.5</div>
+      <div class="stamp" id="stamp"></div>
       <div class="hint">Drag to orbit · scroll or pinch to zoom · right-drag to pan</div>
     </div>
     <aside class="panel" id="panel">
@@ -146,7 +157,10 @@ body { margin: 0; }
       </div>
       <section class="detail" id="detail" aria-live="polite"></section>
       <ul class="plist" id="plist"></ul>
-      <p class="foot">A simplified teaching model. Shapes and proportions are approximate. The battery and controller sit at opposite ends under the footpads; which end is which is simplified here. This is not a repair guide, and it is not affiliated with Future Motion.</p>
+      <div class="foot">
+        <p>A simplified teaching model. Shapes and proportions are approximate and scaled per model. The battery and controller sit at opposite ends under the footpads; which end is which is simplified here. This is not a repair guide, and it is not affiliated with Future Motion.</p>
+        <p>Spec sources: <a href="https://en.wikipedia.org/wiki/Onewheel" target="_blank" rel="noopener">Wikipedia</a>, <a href="https://rideonexperience.com/en/onewheel/" target="_blank" rel="noopener">Ride On Experience</a>, <a href="https://www.longboarderlabs.com/16/onewheel-showdown-pint-s-vs-gt-gt-s-and-xr-classic/2025/10/blog/electric/" target="_blank" rel="noopener">Longboarder Labs</a>, <a href="https://onewheel.com/products/onewheel-gt-s-series-motor" target="_blank" rel="noopener">Future Motion</a>.</p>
+      </div>
     </aside>
   </div>
 </div>
@@ -154,21 +168,40 @@ body { margin: 0; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-const TAGS = { ride: "Ride feel", wear: "Wear item", elec: "Electrical", frame: "Structure", acc: "Accessory" };
+/* Model geometry values (tireD, tireW, hub, len, wid; inches) are approximate and only drive the drawing. */
+const MODELS = [
+  { id: "pint", name: "Pint", fam: "pint", year: "2019", tireD: 10.5, tireW: 6.0, hub: 6, len: 27, wid: 9.0, range: "6–8 mi", speed: "16 mph", weight: "about 23 lb", volts: "63 V", wheel: "about 10.5 in tire on a 6 in hub" },
+  { id: "pintx", name: "Pint X", fam: "pint", year: "2021", tireD: 10.5, tireW: 6.0, hub: 6, len: 27, wid: 9.0, range: "12–18 mi", speed: "18 mph", weight: "about 27 lb", volts: "63 V", wheel: "about 10.5 in tire on a 6 in hub" },
+  { id: "pints", name: "Pint S", fam: "pint", year: "2024", tireD: 10.5, tireW: 6.0, hub: 6, len: 27, wid: 9.0, range: "12–18 mi", speed: "20 mph", weight: "about 27 lb", volts: "63 V", wheel: "about 10.5 in tire on a 6 in hub" },
+  { id: "xr", name: "XR", fam: "xr", year: "2018 (+XR), 2024 (XR Classic)", tireD: 11.5, tireW: 6.25, hub: 6, len: 27, wid: 9.5, range: "17–24 mi", speed: "20 mph", weight: "about 30 lb", volts: "75 V", wheel: "about 11.5 in tire on a 6 in hub", note: "Range, speed and weight are for the 2024 XR Classic." },
+  { id: "gt", name: "GT", fam: "gt", year: "2021", tireD: 11.5, tireW: 6.5, hub: 6.5, len: 29.5, wid: 9.5, range: "20–32 mi", speed: "20 mph", weight: "about 35 lb", volts: "75 V", wheel: "11.5 × 6.5–6.5 tire on a 6.5 in hub" },
+  { id: "gts", name: "GT-S", fam: "gt", full: "GT S-Series", year: "2023", tireD: 11.5, tireW: 6.5, hub: 6.5, len: 29.5, wid: 9.5, range: "16–25 mi", speed: "25 mph", weight: "about 33 lb", volts: "113 V", wheel: "11.5 in tire on a 6.5 in hub (6 in on the Rally Edition)" }
+];
+const MODEL_BY_ID = Object.fromEntries(MODELS.map(m => [m.id, m]));
 
+const TAGS = { ride: "Ride feel", wear: "Wear item", elec: "Electrical", frame: "Structure", acc: "Accessory" };
+const COMPOUNDS = "Soft compounds feel more forgiving; mid compounds last longer and carve with a sharper edge.";
+
+/* Text fields can be overridden per family (key_pint, key_xr, key_gt) or per model (key_gts). */
 const PARTS = [
   { id: "tire", name: "Tire", short: "Your only contact with the ground", tags: ["ride", "wear"],
     what: "The one part that touches the ground. Its width, profile (flat center or round shoulders), rubber compound and air pressure decide most of how stable or carvy the board feels.",
     connects: "Mounts on the rim of the hub motor. The hub splits apart so the tire can come off.",
-    upgrades: ["FM GT Performance Treaded: 7 in wide, soft compound. The stability pick.", "TFL Pioneer: 6.9 in, deep siped tread for wet and winter.", "TFL ThunderCat: 6.75 in hybrid tread, a bit carvier.", "TFL Enduro and Street Pro 2: 6.5 in, tuned for carving.", "Most aftermarket tires come in soft (forgiving) or mid (longer life, sharper edge) compounds."],
+    upgrades_pint: ["Pint tires fit the 6 in Pint hub. Aftermarket makers such as TFL list Pint versions of tires like the ThunderCat and Street Pro 2.", COMPOUNDS],
+    upgrades_xr: ["The 6 in XR hub has the widest aftermarket choice: Burris treaded and slick, Vega, and TFL (Enduro, ThunderCat, Street Pro 2), among others.", COMPOUNDS],
+    upgrades_gt: ["FM GT Performance Treaded (7 in wide, soft) and Performance Slick (6.5 in).", "TFL Pioneer (6.9 in, deep siped tread), ThunderCat (6.75 in), and Enduro and Street Pro 2 (6.5 in).", COMPOUNDS],
     diy: ["Hard", "The motor comes off the board and the hub is taken apart. Many riders pay a shop."],
-    gt: "GT tires are 11.5 × 6.5–6.5. The 6.5 in hub is a size only Future Motion uses, so XR tires do not fit a stock GT hub. For stability: go wider, use soft compound, and run lower pressure." },
+    tip: "For a more stable feel, choose a wider tire with a flatter center, a soft compound, and lower pressure. Higher pressure and rounder shoulders feel carvier.",
+    tip_gt: "For a more stable feel, choose a wider tire with a flatter center, a soft compound, and lower pressure. The GT's 6.5 in hub is a size only Future Motion uses, so XR tires do not fit a stock GT hub." },
   { id: "hub", name: "Hub motor", short: "The wheel is the motor", tags: ["elec"],
     what: "A Onewheel uses a hub motor: the wheel itself is the motor. The outer shell carries a ring of permanent magnets and spins around the stator, which stays still. The shell is also the rim the tire mounts on.",
     connects: "Spins on two bearings around the fixed axle. The motor's wires leave through the axle to the controller.",
-    upgrades: ["FM GT S-Series motor: Future Motion lists it as compatible with the standard GT. More low-end torque and better heat handling. Comes in 6.5 in and 6 in hub sizes.", "Aftermarket motors (for example Superflux) need custom wiring or a VESC controller."],
+    upgrades_pint: ["Few drop-in motor upgrades exist for the Pint family. Bigger motor changes usually go with a VESC conversion."],
+    upgrades_xr: ["Future Motion lists the 6 in GT S-Series motor as compatible with the XR Classic.", "The Superflux is a popular aftermarket XR motor; fitting it takes some wiring work."],
+    upgrades_gt: ["The GT S-Series motor fits the standard GT, according to Future Motion: more low-end torque and better heat handling.", "Aftermarket motors such as the Superflux need custom wiring or a VESC controller."],
+    upgrades_gts: ["The S-Series motor is stock. Future Motion also sells a 6 in version (used on the Rally Edition) for a taller tire sidewall and more cushion."],
     diy: ["Moderate", "Swapping a complete motor is unplug, unbolt, bolt in. Opening a motor is shop work."],
-    gt: "Buying a used tire already mounted on a GT-S motor skips the tire-mounting job entirely." },
+    tip_gt: "Buying a tire already mounted on a spare motor skips the tire-mounting job entirely." },
   { id: "stator", name: "Stator and windings", short: "The motor's stationary half", tags: ["elec"],
     what: "Copper coils wound on a steel core and fixed to the axle. The controller energizes the coils in sequence, which pulls the magnets in the hub shell around. Small hall sensors on the stator report the shell's position so the controller knows which coil to fire next.",
     connects: "Fixed to the axle inside the hub shell. Its wires run out through the axle.",
@@ -177,35 +210,40 @@ const PARTS = [
   { id: "bearings", name: "Bearings", short: "Let the wheel spin on the axle", tags: ["wear"],
     what: "Two sealed ball bearings, one at each side of the hub, let the shell spin smoothly around the fixed axle.",
     connects: "Pressed into the hub shell and riding on the axle.",
-    upgrades: ["Replacement bearings, including higher-grade brands.", "FM says the GT S-Series motor uses NSK bearings."],
+    upgrades: ["Replacement bearings, including higher-grade brands."],
+    upgrades_gt: ["Replacement bearings, including higher-grade brands.", "Future Motion says the S-Series motor uses NSK bearings."],
     diy: ["Hard", "Needs the motor opened and a bearing puller or press."],
     wear: "Grinding, rumbling, or side-to-side play in the wheel usually means worn bearings." },
   { id: "axle", name: "Axle", short: "Fixed shaft that carries your weight", tags: ["frame"],
     what: "A steel shaft through the center of the motor. It does not spin. It carries your weight from the rails into the wheel, and the motor cable exits through it.",
-    connects: "Its ends are clamped into the rails by the axle blocks.",
+    connects: "Its ends are clamped into the rails by the axle blocks. The bolts you see on the side of each rail hold it.",
     upgrades: ["Comes with the motor; not upgraded on its own."],
     diy: ["Moderate", "Removed together with the motor."] },
   { id: "blocks", name: "Axle blocks", short: "Set the ride height", tags: ["ride", "frame"],
     what: "Clamps that hold the axle ends in the rails. Where they place the axle relative to the rails sets how high your feet ride above the ground.",
-    connects: "Bolt into the rails and clamp the axle.",
-    upgrades: ["Offset blocks lift or lower the board, for example Half & Half blocks (about 0.5 in). They are listed for the XR, so check GT fit.", "Land-Surf VRH (GT/GT-S): 7 positions about 7 mm apart, from about 1 in lower to 0.5 in higher than stock."],
+    connects: "Sit inside the rails and clamp the axle. Bolts through the rail hold them.",
+    upgrades_pint: ["Aftermarket lift and lowering blocks exist for the Pint family. Check the listing for your exact model."],
+    upgrades_xr: ["Offset blocks such as Half & Half lift or lower the board about 0.5 in."],
+    upgrades_gt: ["Land-Surf VRH (GT/GT-S): 7 positions about 7 mm apart, from about 1 in lower to 0.5 in higher than stock.", "Offset lift and lowering blocks from several makers. Check GT fit."],
     diy: ["Easy", "A few bolts, with the board supported."],
-    gt: "A lower board means a lower center of gravity and a less tippy feel. The trade-off is less clearance, so the rails and nose scrape sooner in hard carves." },
+    tip: "A lower board means a lower center of gravity and a less tippy feel. The trade-off is less clearance, so the rails and nose scrape sooner in hard carves." },
   { id: "rails", name: "Rails", short: "The frame everything bolts to", tags: ["frame", "ride"],
-    what: "Two aluminum side frames that form the board's backbone. The axle, footpads, enclosures and bumpers all bolt to them. Their shape sets foot height, curvature and ground clearance.",
+    what: "Two aluminum side frames that form the board's backbone. They run flat along the top under your feet and drop deeper around the axle, where the load is highest. The axle, footpads, enclosures and bumpers all attach to them. Their shape sets foot height, curvature and ground clearance.",
     connects: "Hold the axle blocks at the middle and the footpads, enclosures and bumpers at each end.",
-    upgrades: ["Homebrew WTF rails (GT/GT-S): about 0.5 in lower at your feet without losing clearance.", "WTF Low Rider: lower still.", "Other aftermarket rails trade off strength, weight, looks and clearance."],
-    diy: ["Moderate", "The whole board comes apart. Plan a careful afternoon."],
-    gt: "This is the bigger version of the ride-height fix. Try the tire and pressure first." },
+    upgrades_pint: ["Aftermarket Pint rails exist, mostly for strength or to fit a larger tire."],
+    upgrades_xr: ["Many aftermarket XR rails, including lowered and extended designs. Extended rails make room for bigger tires."],
+    upgrades_gt: ["Homebrew WTF rails (GT/GT-S): about 0.5 in lower at your feet without losing clearance.", "WTF Low Rider: lower still.", "Other aftermarket rails trade off strength, weight, looks and clearance."],
+    diy: ["Moderate", "The whole board comes apart. Plan a careful afternoon."] },
   { id: "front", name: "Front footpad", short: "Grip and sensor for your front foot", tags: ["ride"],
     what: "Where your front foot goes. It holds the rider sensor. Its shape (concave, width, grip) decides how locked-in your foot feels when the board hits something.",
+    what_pint: "Where your front foot goes. Pint models call it the MagicPad, and it holds the rider sensor. Its shape (concave, width, grip) decides how locked-in your foot feels when the board hits something.",
     connects: "Bolts to the rails above one enclosure. The sensor cable runs to the controller.",
-    upgrades: ["Concave or wider pads (Kush and similar) for a more locked-in foot.", "A replacement pad must include or accept a sensor that works with the GT."],
+    upgrades: ["Concave or wider pads (Kush and similar) for a more locked-in foot.", "A replacement pad must include or accept a sensor that works with your model."],
     diy: ["Easy", "Mostly bolts; route the sensor cable carefully."] },
   { id: "sensor", name: "Footpad sensor", short: "The board's on switch for riding", tags: ["elec", "wear"],
     what: "A pressure sensor split into two zones, heel side and toe side. With your foot on it, the board can balance. Lift your heel off and the board disengages, which is how you dismount.",
     connects: "Sits inside the front footpad and plugs into the controller.",
-    upgrades: ["Replacement sensors are a common repair part."],
+    upgrades: ["Replacement sensors are a common repair part. Buy the one made for your model."],
     diy: ["Moderate", "The pad comes off and the connector must seat fully."],
     wear: "Dead spots in a worn sensor can disengage the board while you ride. If the app shows zones dropping out, replace it." },
   { id: "rear", name: "Rear footpad", short: "Grip for your back foot", tags: ["ride"],
@@ -215,27 +253,29 @@ const PARTS = [
     diy: ["Easy", "A few bolts."] },
   { id: "battery", name: "Battery", short: "Range and power", tags: ["elec"],
     what: "A lithium-ion pack with a battery management system (BMS) that protects the cells while charging and riding. It sets your range and how much power the motor has to work with.",
-    connects: "Cabled to the controller. Charging also runs through the board's electronics.",
-    upgrades: ["Future Motion replacement pack.", "Bigger aftermarket packs usually go with a VESC conversion."],
+    connects: "Cabled to the controller. It sits in a sealed enclosure under one footpad, protected from below by the bumper.",
+    upgrades: ["Future Motion replacement pack for your model.", "Bigger aftermarket packs usually go with a VESC conversion."],
     diy: ["Moderate", "A sealed pack can be swapped. Do not open it."],
     caution: "A lithium pack stores a lot of energy. Never open, puncture or rewire it. A swollen or damaged pack is a fire risk." },
   { id: "controller", name: "Controller", short: "The brain that keeps you balanced", tags: ["elec", "ride"],
     what: "Tilt sensors (a gyroscope and accelerometer) measure the deck's angle many times a second, and the firmware drives the motor to keep the deck level. The controller also runs Bluetooth for the app, ride modes, custom shaping and the lights.",
-    connects: "Joins the motor cable, battery and footpad sensor.",
+    connects: "Joins the motor cable, battery and footpad sensor. It sits in a sealed enclosure under the other footpad.",
     upgrades: ["Free: change ride modes and custom shaping in the app.", "Future Motion controllers are specific to each model.", "VESC replaces it with an open-source controller. That is a large project."],
     diy: ["Hard", "A swap is possible at home but needs care with every connector."],
-    gt: "For stability, try turning carve ability down in custom shaping. It costs nothing." },
+    tip: "To make the board feel more stable, try turning carve ability down in custom shaping, where your model supports it. It costs nothing." },
   { id: "cable", name: "Motor cable and connector", short: "Power to the motor, position back", tags: ["elec", "wear"],
     what: "Carries three thick phase wires that power the motor, plus thin hall-sensor wires that report the wheel's position back to the controller.",
-    connects: "Runs from the axle end, along the rail, into the controller. The GT connector has a retaining ring that locks it in.",
-    upgrades: ["Replacement retaining rings and connector parts are sold separately."],
+    connects: "Runs from the axle end, along the inside of the rail, into the controller.",
+    connects_gt: "Runs from the axle end, along the inside of the rail, into the controller. The GT connector has a retaining ring that locks it in.",
+    upgrades: ["Replacement connector parts are sold separately for most models."],
     diy: ["Easy", "Unplugging is easy. Repairing wires is not."],
     wear: "Bent pins, a loose connector, or pinched wires can cause errors or cut-outs. Check it whenever the motor comes off." },
-  { id: "bumpers", name: "Bumpers", short: "End caps that take the hits", tags: ["wear"],
-    what: "Caps on the nose and tail that take the impact when the board touches down or tips over, so the rails and enclosures don't. Each end also has a light that switches between white and red with your direction of travel.",
-    connects: "Bolt to the rail ends.",
-    upgrades: ["Heavier-duty aftermarket bumpers and skid plates.", "They must match your rails."],
-    diy: ["Easy", "A few bolts."] },
+  { id: "bumpers", name: "Bumpers", short: "Wrap the ends and the underside", tags: ["wear"],
+    what: "Tough plastic shells that wrap around the nose and tail and continue underneath the battery and controller enclosures. They take the hits when the board touches down, drags or tips over, so the electronics don't. Each end also has a light that switches between white and red with your direction of travel.",
+    connects: "Bolt to the rail ends and cradle the enclosures from below.",
+    upgrades: ["Heavier-duty aftermarket bumpers and add-on skid plates.", "They must match your rails."],
+    diy: ["Easy", "A few bolts."],
+    wear: "Nose and tail drags grind the bottom of the bumper. Replace it before the wear reaches the enclosure." },
   { id: "fender", name: "Fender", short: "Keeps spray and grit off you", tags: ["acc"],
     what: "Covers the top of the tire so water, mud and grit don't get thrown up at you.",
     connects: "Mounts over the tire between the footpads.",
@@ -245,6 +285,14 @@ const PARTS = [
 PARTS.forEach((p, i) => p.n = i + 1);
 const BY_ID = Object.fromEntries(PARTS.map(p => [p.id, p]));
 
+let model = MODEL_BY_ID.gt;
+try {
+  const h = (location.hash || "").slice(1), saved = localStorage.getItem("ow-model");
+  if (MODEL_BY_ID[h]) model = MODEL_BY_ID[h]; else if (MODEL_BY_ID[saved]) model = MODEL_BY_ID[saved];
+} catch (err) { /* storage unavailable */ }
+const T = (p, k) => p[k + "_" + model.id] ?? p[k + "_" + model.fam] ?? p[k];
+const modelName = m => m.full || m.name;
+
 const detailEl = document.getElementById("detail");
 const listEl = document.getElementById("plist");
 let selected = null, filter = "all", hovered = null;
@@ -252,11 +300,31 @@ let selected = null, filter = "all", hovered = null;
 function inFilter(p) { return filter === "all" || p.tags.includes(filter); }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
+function renderModels() {
+  const el = document.getElementById("models");
+  el.innerHTML = MODELS.map(m => `<button type="button" data-model="${m.id}" aria-pressed="${m.id === model.id}">${esc(m.name)}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => setModel(b.dataset.model)));
+  document.getElementById("stamp").innerHTML = `${esc(modelName(model))} · approximate scale<br>${esc(model.wheel)}`;
+}
+
 function renderDetail() {
   if (!selected) {
+    const m = model;
     detailEl.innerHTML = `
-      <h2>How the parts work together</h2>
-      <p>A Onewheel balances itself around one large wheel, and the wheel is also the motor. Four parts run the balance loop:</p>
+      <h2>${esc(modelName(m))} at a glance</h2>
+      <table class="specs">
+        <tr><th>Released</th><td>${esc(m.year)}</td></tr>
+        <tr><th>Wheel</th><td>${esc(m.wheel)}</td></tr>
+        <tr><th>Range</th><td>${esc(m.range)} (claimed)</td></tr>
+        <tr><th>Top speed</th><td>${esc(m.speed)}</td></tr>
+        <tr><th>Weight</th><td>${esc(m.weight)}</td></tr>
+        <tr><th>Battery system</th><td>${esc(m.volts)}</td></tr>
+      </table>
+      ${m.note ? `<p class="small">${esc(m.note)}</p>` : ""}
+      <div>
+        <h3>How the parts work together</h3>
+        <p>Every Onewheel uses the same basic layout: one large wheel that is also the motor, held between two rails, with the battery at one end and the controller at the other. Four parts run the balance loop:</p>
+      </div>
       <ol>
         <li>The <b>footpad sensor</b> tells the controller you are standing on the board.</li>
         <li>The <b>controller</b> measures the deck's tilt many times a second.</li>
@@ -275,17 +343,18 @@ function renderDetail() {
       </div>`;
   } else {
     const p = BY_ID[selected];
+    const tip = T(p, "tip"), wear = T(p, "wear"), caution = T(p, "caution");
     detailEl.innerHTML = `
-      <button class="btn back" type="button" data-go="">← All parts</button>
+      <button class="btn back" type="button" data-go="">← ${esc(modelName(model))} overview</button>
       <div class="dhead"><span class="num">${p.n}</span><h2>${esc(p.name)}</h2></div>
-      <div class="tags">${p.tags.map(t => `<span class="tag">${TAGS[t]}</span>`).join("")}</div>
-      <div><h3>What it does</h3><p>${esc(p.what)}</p></div>
-      <div><h3>How it connects</h3><p>${esc(p.connects)}</p></div>
-      <div><h3>Upgrades and swaps</h3><ul>${p.upgrades.map(u => `<li>${esc(u)}</li>`).join("")}</ul></div>
+      <div class="tags">${p.tags.map(t => `<span class="tag">${TAGS[t]}</span>`).join("")}<span class="tag">${esc(modelName(model))}</span></div>
+      <div><h3>What it does</h3><p>${esc(T(p, "what"))}</p></div>
+      <div><h3>How it connects</h3><p>${esc(T(p, "connects"))}</p></div>
+      <div><h3>Upgrades and swaps</h3><ul>${T(p, "upgrades").map(u => `<li>${esc(u)}</li>`).join("")}</ul></div>
       <div><h3>Working on it</h3><p><span class="diy">${p.diy[0]}</span>${esc(p.diy[1])}</p></div>
-      ${p.wear ? `<div class="note"><b>Signs of wear</b>${esc(p.wear)}</div>` : ""}
-      ${p.gt ? `<div class="note"><b>GT tip</b>${esc(p.gt)}</div>` : ""}
-      ${p.caution ? `<div class="caution"><b>Caution</b>${esc(p.caution)}</div>` : ""}`;
+      ${wear ? `<div class="note"><b>Signs of wear</b>${esc(wear)}</div>` : ""}
+      ${tip ? `<div class="note"><b>Tip</b>${esc(tip)}</div>` : ""}
+      ${caution ? `<div class="caution"><b>Caution</b>${esc(caution)}</div>` : ""}`;
   }
   detailEl.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => select(b.dataset.go || null)));
 }
@@ -306,16 +375,25 @@ document.querySelectorAll("[data-filter]").forEach(b => b.addEventListener("clic
 }));
 
 let applyHighlight = () => {};
+let rebuild = () => {};
 function refresh() { renderDetail(); renderList(); applyHighlight(); }
 function select(id) { selected = id; refresh(); }
+function setModel(id) {
+  if (!MODEL_BY_ID[id] || id === model.id) return;
+  model = MODEL_BY_ID[id];
+  try { localStorage.setItem("ow-model", id); } catch (err) { /* ignore */ }
+  try { history.replaceState(null, "", "#" + id); } catch (err) { /* ignore */ }
+  renderModels(); rebuild(); refresh();
+}
 document.addEventListener("keydown", e => { if (e.key === "Escape" && selected) select(null); });
+renderModels();
 refresh();
 
 /* ---------- 3D ---------- */
 const viewport = document.getElementById("viewport");
 if (!window.THREE || !THREE.OrbitControls) {
   const d = document.createElement("div"); d.className = "err";
-  d.textContent = "The 3D viewer could not load. The parts reference on the right still works.";
+  d.textContent = "The 3D viewer could not load. The parts reference still works.";
   viewport.appendChild(d);
 } else { init3D(); }
 
@@ -348,205 +426,263 @@ function init3D() {
   new MutationObserver(buildGrid).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
   const root = new THREE.Group(); scene.add(root);
-  const V2 = a => new THREE.Vector2(a[0], a[1]);
   const PI = Math.PI;
-  const H = 5.75;
-  const railMid = x => H - 0.15 + 0.0034 * x * x;
-  const railTop = x => railMid(x) + 0.9;
-  const slope = x => Math.atan(0.0068 * x);
+  const V2 = a => new THREE.Vector2(a[0], a[1]);
   const M = (color, o) => new THREE.MeshStandardMaterial(Object.assign({ color, metalness: 0.1, roughness: 0.7 }, o || {}));
   const lathe = (pts, seg) => { const g = new THREE.LatheGeometry(pts.map(V2), seg || 72); g.rotateX(PI / 2); return g; };
   const zCyl = (r, h, seg) => { const g = new THREE.CylinderGeometry(r, r, h, seg || 24); g.rotateX(PI / 2); return g; };
-
-  const state = {};
-  PARTS.forEach(p => { const g = new THREE.Group(); root.add(g); state[p.id] = { group: g, pieces: [], mats: [] }; });
-  function piece(id, obj, off) {
-    obj.userData.base = obj.position.clone();
-    obj.userData.off = new THREE.Vector3(off[0], off[1], off[2]);
-    state[id].group.add(obj); state[id].pieces.push(obj);
-  }
-
-  // 1 Tire
-  {
-    const g = new THREE.Group();
-    const rubber = M(0x26292c, { roughness: 0.92, side: THREE.DoubleSide });
-    g.add(new THREE.Mesh(lathe([[3.3, -3.0], [4.3, -3.25], [5.1, -3.18], [5.55, -2.8], [5.72, -2.0], [5.75, -1.0], [5.75, 1.0], [5.72, 2.0], [5.55, 2.8], [5.1, 3.18], [4.3, 3.25], [3.3, 3.0]], 96), rubber));
-    const groove = M(0x101214, { roughness: 1 });
-    [-1.75, -0.6, 0.6, 1.75].forEach(z => { const t = new THREE.Mesh(new THREE.TorusGeometry(5.74, 0.06, 6, 120), groove); t.position.z = z; g.add(t); });
-    g.position.set(0, H, 0); piece("tire", g, [0, 9, 0]);
-  }
-  // 2 Hub motor shell
-  {
-    const g = new THREE.Group();
-    const alu = M(0x3b434a, { metalness: 0.7, roughness: 0.35, side: THREE.DoubleSide });
-    g.add(new THREE.Mesh(lathe([[2.85, -3], [3.28, -3], [3.28, 3], [2.85, 3], [2.85, -3]]), alu));
-    const bolt = M(0xb9c0c6, { metalness: 0.9, roughness: 0.3 });
-    [-1, 1].forEach(s => {
-      const fl = new THREE.Mesh(lathe([[2.85, -0.09], [3.5, -0.09], [3.5, 0.09], [2.85, 0.09], [2.85, -0.09]]), alu);
-      fl.position.z = 3.0 * s; g.add(fl);
-      for (let i = 0; i < 10; i++) {
-        const a = i / 10 * PI * 2, b = new THREE.Mesh(zCyl(0.12, 0.12, 10), bolt);
-        b.position.set(Math.cos(a) * 3.15, Math.sin(a) * 3.15, 3.13 * s); g.add(b);
-      }
-    });
-    const magN = M(0x8c2f2f, { metalness: 0.4, roughness: 0.5 }), magS = M(0x2f4c6e, { metalness: 0.4, roughness: 0.5 });
-    for (let i = 0; i < 28; i++) {
-      const a = i / 28 * PI * 2, m = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.5, 5.6), i % 2 ? magN : magS);
-      m.position.set(Math.cos(a) * 2.78, Math.sin(a) * 2.78, 0); m.rotation.z = a; g.add(m);
-    }
-    g.position.set(0, H, 0); piece("hub", g, [0, 0, 0]);
-  }
-  // 3 Stator
-  {
-    const g = new THREE.Group();
-    g.add(new THREE.Mesh(zCyl(1.9, 5.0, 48), M(0x6d757c, { metalness: 0.6, roughness: 0.45 })));
-    const cu = M(0xb8732e, { metalness: 0.6, roughness: 0.35 });
-    for (let i = 0; i < 24; i++) {
-      const a = i / 24 * PI * 2, w = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.42, 5.1), cu);
-      w.position.set(Math.cos(a) * 2.25, Math.sin(a) * 2.25, 0); w.rotation.z = a; g.add(w);
-    }
-    const pcb = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.55, 0.08), M(0x1f7a3d, { roughness: 0.6 }));
-    pcb.position.set(0, 1.2, 2.6); g.add(pcb);
-    g.position.set(0, H, 0); piece("stator", g, [0, -7, 0]);
-  }
-  // 4 Bearings
-  [1, -1].forEach(s => {
-    const g = new THREE.Group();
-    g.add(new THREE.Mesh(lathe([[0.52, -0.3], [1.15, -0.3], [1.15, 0.3], [0.52, 0.3], [0.52, -0.3]], 48), M(0xc4cad0, { metalness: 0.9, roughness: 0.25 })));
-    const seal = new THREE.Mesh(lathe([[0.64, 0], [1.04, 0]], 48), M(0x1d2226, { roughness: 0.8, side: THREE.DoubleSide }));
-    seal.position.z = 0.31 * s; g.add(seal);
-    g.position.set(0, H, 2.85 * s); piece("bearings", g, [0, 0, 4.5 * s]);
-  });
-  // 5 Axle
-  {
-    const m = new THREE.Mesh(zCyl(0.5, 9.6, 24), M(0x9aa3ab, { metalness: 0.85, roughness: 0.3 }));
-    m.position.set(0, H, 0); piece("axle", m, [0, -12.5, 0]);
-  }
-  // 6 Axle blocks
-  [1, -1].forEach(s => {
-    const g = new THREE.Group();
-    g.add(new THREE.Mesh(new THREE.BoxGeometry(2.0, 2.0, 0.7), M(0x2c3237, { metalness: 0.6, roughness: 0.4 })));
-    const bm = M(0xb9c0c6, { metalness: 0.9, roughness: 0.3 });
-    [-0.6, 0.6].forEach(x => { const b = new THREE.Mesh(zCyl(0.16, 0.12, 12), bm); b.position.set(x, 0.6, 0.38 * s); g.add(b); });
-    g.position.set(0, H, 4.65 * s); piece("blocks", g, [0, 0, 7 * s]);
-  });
-  // 7 Rails
-  {
-    const sh = new THREE.Shape();
-    const xs = []; for (let x = -14.5; x <= 14.5001; x += 0.5) xs.push(x);
-    sh.moveTo(xs[0], railMid(xs[0]) - 0.9);
-    xs.slice(1).forEach(x => sh.lineTo(x, railMid(x) - 0.9));
-    xs.slice().reverse().forEach(x => sh.lineTo(x, railTop(x)));
-    sh.closePath();
-    const geo = new THREE.ExtrudeGeometry(sh, { depth: 0.5, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 2, curveSegments: 4 });
-    const bm = M(0x2a2f33, { metalness: 0.7, roughness: 0.4 });
-    [1, -1].forEach(s => {
-      const g = new THREE.Group();
-      g.add(new THREE.Mesh(geo, M(0x9aa5ae, { metalness: 0.65, roughness: 0.38 })));
-      [-12, -8, 8, 12].forEach(x => { const b = new THREE.Mesh(zCyl(0.16, 0.1, 12), bm); b.position.set(x, railTop(x) - 0.4, s > 0 ? 0.6 : -0.1); g.add(b); });
-      g.position.z = s > 0 ? 5.0 : -5.5;
-      piece("rails", g, [0, 0, 10 * s]);
-    });
-  }
-  // 8/10 Footpads
+  const roundRect = (s, x0, y0, x1, y1, r) => {
+    s.moveTo(x0 + r, y0); s.lineTo(x1 - r, y0); s.quadraticCurveTo(x1, y0, x1, y0 + r);
+    s.lineTo(x1, y1 - r); s.quadraticCurveTo(x1, y1, x1 - r, y1); s.lineTo(x0 + r, y1);
+    s.quadraticCurveTo(x0, y1, x0, y1 - r); s.lineTo(x0, y0 + r); s.quadraticCurveTo(x0, y0, x0 + r, y0);
+    return s;
+  };
   const gripTex = (() => {
     const c = document.createElement("canvas"); c.width = c.height = 128;
     const x = c.getContext("2d"); x.fillStyle = "#2a2e32"; x.fillRect(0, 0, 128, 128);
-    x.strokeStyle = "#40474d"; x.lineWidth = 5;
-    for (let i = -128; i < 256; i += 16) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i + 128, 128); x.stroke(); }
-    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(0.35, 0.35); return t;
+    for (let i = 0; i < 900; i++) { x.fillStyle = Math.random() < 0.5 ? "#353a3f" : "#23272a"; x.fillRect(Math.random() * 128, Math.random() * 128, 2, 2); }
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(0.5, 0.5); return t;
   })();
-  function padGeo() {
-    const L = 8, W = 10.4, r = 0.9, s = new THREE.Shape();
-    s.moveTo(-L / 2 + r, -W / 2); s.lineTo(L / 2 - r, -W / 2); s.quadraticCurveTo(L / 2, -W / 2, L / 2, -W / 2 + r);
-    s.lineTo(L / 2, W / 2 - r); s.quadraticCurveTo(L / 2, W / 2, L / 2 - r, W / 2); s.lineTo(-L / 2 + r, W / 2);
-    s.quadraticCurveTo(-L / 2, W / 2, -L / 2, W / 2 - r); s.lineTo(-L / 2, -W / 2 + r); s.quadraticCurveTo(-L / 2, -W / 2, -L / 2 + r, -W / 2);
-    const g = new THREE.ExtrudeGeometry(s, { depth: 0.5, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.08, bevelSegments: 2, curveSegments: 6 });
-    g.rotateX(-PI / 2); g.translate(0, -0.25, 0); return g;
-  }
-  [["front", 10.2, 2.5], ["rear", -10.2, -2.5]].forEach(([id, x, dx]) => {
-    const m = new THREE.Mesh(padGeo(), [M(0xffffff, { map: gripTex, roughness: 0.95 }), M(0x1e2124, { roughness: 0.8 })]);
-    m.position.set(x, railTop(x) + 0.3, 0); m.rotation.z = slope(x);
-    piece(id, m, [dx, 6.2, 0]);
-  });
-  // 9 Sensor
-  {
-    const g = new THREE.Group();
-    [[2.45, 0x2aa198], [-2.45, 0xd9822b]].forEach(([z, c]) => {
-      const m = new THREE.Mesh(new THREE.BoxGeometry(7.2, 0.08, 4.6), M(c, { roughness: 0.5 })); m.position.z = z; g.add(m);
-    });
-    const tail = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.05, 0.6), M(0xc9a227, { roughness: 0.5 }));
-    tail.position.set(-4.6, 0, 0); g.add(tail);
-    g.position.set(10.2, railTop(10.2) - 0.1, 0); g.rotation.z = slope(10.2);
-    piece("sensor", g, [2.5, 3.4, 0]);
-  }
-  // 11/12 Enclosures
-  {
-    const bat = new THREE.Group();
-    bat.add(new THREE.Mesh(new THREE.BoxGeometry(7.0, 1.7, 9.6), M(0x2e3a40, { metalness: 0.35, roughness: 0.55 })));
-    const rib = M(0x3c4a51, { metalness: 0.35, roughness: 0.5 });
-    [-2.4, 0, 2.4].forEach(z => { const r = new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.12, 0.5), rib); r.position.set(0, -0.9, z); bat.add(r); });
-    bat.position.set(10.0, railTop(10) - 0.95, 0); bat.rotation.z = slope(10);
-    piece("battery", bat, [3, -7, 0]);
 
-    const ctl = new THREE.Group();
-    ctl.add(new THREE.Mesh(new THREE.BoxGeometry(7.0, 1.7, 9.6), M(0x343a40, { metalness: 0.45, roughness: 0.45 })));
-    const fin = M(0x5a636b, { metalness: 0.7, roughness: 0.35 });
-    for (let i = 0; i < 7; i++) { const f = new THREE.Mesh(new THREE.BoxGeometry(6.0, 0.35, 0.14), fin); f.position.set(0, -1.0, -3.6 + i * 1.2); ctl.add(f); }
-    const port = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.2, 16), M(0x111315, {}));
-    port.rotation.z = PI / 2; port.position.set(-3.55, 0.2, -2.8); ctl.add(port);
-    ctl.position.set(-10.0, railTop(-10) - 0.95, 0); ctl.rotation.z = slope(-10);
-    piece("controller", ctl, [-3, -7, 0]);
-  }
-  // 13 Motor cable
-  {
-    const g = new THREE.Group();
-    const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-0.2, H - 0.2, 4.3), new THREE.Vector3(-2.5, H - 0.6, 4.4), new THREE.Vector3(-5.2, H - 0.4, 4.2), new THREE.Vector3(-6.4, 5.6, 3.6)]);
-    g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 40, 0.22, 10, false), M(0x1b1f22, { roughness: 0.6 })));
-    const con = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.0, 20), M(0x8b939a, { metalness: 0.8, roughness: 0.3 }));
-    con.rotation.z = PI / 2; con.position.set(-6.9, 5.6, 3.6); g.add(con);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.07, 8, 24), M(0xd08a2c, { roughness: 0.5 }));
-    ring.rotation.y = PI / 2; ring.position.set(-6.6, 5.6, 3.6); g.add(ring);
-    piece("cable", g, [-1, -3.5, 4]);
-  }
-  // 14 Bumpers
-  {
-    const s = new THREE.Shape(), w = 1.3, h = 2.0, r = 0.45;
-    s.moveTo(-w / 2 + r, -h / 2); s.lineTo(w / 2 - r, -h / 2); s.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
-    s.lineTo(w / 2, h / 2 - r); s.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2); s.lineTo(-w / 2 + r, h / 2);
-    s.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r); s.lineTo(-w / 2, -h / 2 + r); s.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
-    const geo = new THREE.ExtrudeGeometry(s, { depth: 11, bevelEnabled: false, curveSegments: 6 }); geo.translate(0, 0, -5.5);
-    [[1, 0xffffff], [-1, 0xff3b30]].forEach(([d, lc]) => {
+  let state = {}, pickables = [];
+
+  function build(m) {
+    while (root.children.length) {
+      const c = root.children[0]; root.remove(c);
+      c.traverse(o => {
+        if (o.geometry) o.geometry.dispose();
+        if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(x => x.dispose());
+      });
+    }
+    state = {}; pickables = [];
+    PARTS.forEach(p => { const g = new THREE.Group(); root.add(g); state[p.id] = { group: g, pieces: [], mats: [] }; });
+    const piece = (id, obj, off) => {
+      obj.userData.base = obj.position.clone();
+      obj.userData.off = new THREE.Vector3(off[0], off[1], off[2]);
+      state[id].group.add(obj); state[id].pieces.push(obj);
+    };
+
+    // Dimensions (inches)
+    const R = m.tireD / 2, H = R, hubR = m.hub / 2, w = m.tireW / 2, L = m.len / 2;
+    const half = m.wid / 2, railT = 0.45, railIn = half - railT;
+    const k = 0.4 / ((L - 1) * (L - 1));
+    const deckTop = x => H + 1.9 + k * x * x;
+    const encBot = x => deckTop(x) - 2.45;
+    const slope = x => Math.atan(2 * k * x);
+    const capIn = L - 1.1;
+    const padIn = Math.sqrt(Math.max(0, R * R - 2.6)) + 0.8;
+    const padLen = capIn - padIn, padMid = (capIn + padIn) / 2;
+    const shellW = w - 0.25;
+
+    // 1 Tire
+    {
       const g = new THREE.Group();
-      g.add(new THREE.Mesh(geo, M(0x1a1c1e, { roughness: 0.85 })));
-      const light = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.35, 6), new THREE.MeshStandardMaterial({ color: lc, emissive: lc, emissiveIntensity: 0.8 }));
-      light.position.x = 0.67 * d; g.add(light);
-      g.position.set(15.1 * d, railMid(14.8) + 0.2, 0); g.rotation.z = slope(14.8 * d);
-      piece("bumpers", g, [5 * d, 0, 0]);
+      const rubber = M(0x26292c, { roughness: 0.92, side: THREE.DoubleSide });
+      g.add(new THREE.Mesh(lathe([[hubR + 0.05, -w + 0.25], [hubR + 0.9, -w], [R - 0.65, -w + 0.07], [R - 0.2, -w + 0.45], [R - 0.03, -w + 1.2], [R, -w * 0.32], [R, w * 0.32], [R - 0.03, w - 1.2], [R - 0.2, w - 0.45], [R - 0.65, w - 0.07], [hubR + 0.9, w], [hubR + 0.05, w - 0.25]], 96), rubber));
+      const groove = M(0x101214, { roughness: 1 });
+      [-0.55, -0.18, 0.18, 0.55].forEach(f => { const t = new THREE.Mesh(new THREE.TorusGeometry(R - 0.01, 0.06, 6, 120), groove); t.position.z = w * f; g.add(t); });
+      g.position.set(0, H, 0); piece("tire", g, [0, R + 3.3, 0]);
+    }
+    // 2 Hub motor shell
+    {
+      const g = new THREE.Group();
+      const alu = M(0x3b434a, { metalness: 0.7, roughness: 0.35, side: THREE.DoubleSide });
+      g.add(new THREE.Mesh(lathe([[hubR - 0.43, -shellW], [hubR, -shellW], [hubR, shellW], [hubR - 0.43, shellW], [hubR - 0.43, -shellW]]), alu));
+      const bolt = M(0xb9c0c6, { metalness: 0.9, roughness: 0.3 });
+      [-1, 1].forEach(s => {
+        const fl = new THREE.Mesh(lathe([[hubR - 0.43, -0.09], [hubR + 0.22, -0.09], [hubR + 0.22, 0.09], [hubR - 0.43, 0.09], [hubR - 0.43, -0.09]]), alu);
+        fl.position.z = shellW * s; g.add(fl);
+        for (let i = 0; i < 10; i++) {
+          const a = i / 10 * PI * 2, b = new THREE.Mesh(zCyl(0.12, 0.12, 10), bolt);
+          b.position.set(Math.cos(a) * (hubR - 0.12), Math.sin(a) * (hubR - 0.12), (shellW + 0.13) * s); g.add(b);
+        }
+      });
+      const magN = M(0x8c2f2f, { metalness: 0.4, roughness: 0.5 }), magS = M(0x2f4c6e, { metalness: 0.4, roughness: 0.5 });
+      for (let i = 0; i < 28; i++) {
+        const a = i / 28 * PI * 2, mg = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.5, shellW * 2 - 0.4), i % 2 ? magN : magS);
+        mg.position.set(Math.cos(a) * (hubR - 0.5), Math.sin(a) * (hubR - 0.5), 0); mg.rotation.z = a; g.add(mg);
+      }
+      g.position.set(0, H, 0); piece("hub", g, [0, 0, 0]);
+    }
+    // 3 Stator
+    {
+      const g = new THREE.Group(), len = shellW * 2 - 1.0;
+      g.add(new THREE.Mesh(zCyl(hubR - 1.35, len, 48), M(0x6d757c, { metalness: 0.6, roughness: 0.45 })));
+      const cu = M(0xb8732e, { metalness: 0.6, roughness: 0.35 });
+      for (let i = 0; i < 24; i++) {
+        const a = i / 24 * PI * 2, wd = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.4, len + 0.1), cu);
+        wd.position.set(Math.cos(a) * (hubR - 0.98), Math.sin(a) * (hubR - 0.98), 0); wd.rotation.z = a; g.add(wd);
+      }
+      const pcb = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.55, 0.08), M(0x1f7a3d, { roughness: 0.6 }));
+      pcb.position.set(0, hubR - 1.8, len / 2 + 0.1); g.add(pcb);
+      g.position.set(0, H, 0); piece("stator", g, [0, -7, 0]);
+    }
+    // 4 Bearings
+    [1, -1].forEach(s => {
+      const g = new THREE.Group();
+      g.add(new THREE.Mesh(lathe([[0.52, -0.3], [1.15, -0.3], [1.15, 0.3], [0.52, 0.3], [0.52, -0.3]], 48), M(0xc4cad0, { metalness: 0.9, roughness: 0.25 })));
+      const seal = new THREE.Mesh(lathe([[0.64, 0], [1.04, 0]], 48), M(0x1d2226, { roughness: 0.8, side: THREE.DoubleSide }));
+      seal.position.z = 0.31 * s; g.add(seal);
+      g.position.set(0, H, (shellW - 0.15) * s); piece("bearings", g, [0, 0, 4.5 * s]);
     });
-  }
-  // 15 Fender
-  {
-    const geo = new THREE.CylinderGeometry(6.35, 6.35, 7.4, 64, 1, true, PI - 1.05, 2.1); geo.rotateX(PI / 2);
-    const m = new THREE.Mesh(geo, M(0x3e464c, { roughness: 0.5, side: THREE.DoubleSide }));
-    m.position.set(0, H, 0); piece("fender", m, [0, 17, 0]);
-  }
+    // 5 Axle
+    {
+      const a = new THREE.Mesh(zCyl(0.5, railIn * 2, 24), M(0x9aa3ab, { metalness: 0.85, roughness: 0.3 }));
+      a.position.set(0, H, 0); piece("axle", a, [0, -12.5, 0]);
+    }
+    // 6 Axle blocks
+    [1, -1].forEach(s => {
+      const g = new THREE.Group();
+      g.add(new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.0, 0.6), M(0x2c3237, { metalness: 0.6, roughness: 0.4 })));
+      g.position.set(0, H, (railIn - 0.3) * s); piece("blocks", g, [0, 0, 7 * s]);
+    });
+    // 7 Rails: flat top under the feet, deeper section around the axle, chamfered ends
+    {
+      const top = x => deckTop(x) - 0.08;
+      const xa = R * 0.72, xb = padIn + 0.9;
+      const bot = x => {
+        const ax = Math.abs(x), deep = H - 1.35, shallow = encBot(x) + 0.04;
+        if (ax <= xa) return deep;
+        if (ax >= xb) return shallow;
+        const t = (ax - xa) / (xb - xa), s = t * t * (3 - 2 * t);
+        return deep * (1 - s) + shallow * s;
+      };
+      const xEndTop = L - 1.0, xEndBot = L - 1.7;
+      const sh = new THREE.Shape();
+      sh.moveTo(-xEndBot, bot(-xEndBot));
+      for (let x = -xEndBot + 0.25; x < xEndBot; x += 0.25) sh.lineTo(x, bot(x));
+      sh.lineTo(xEndBot, bot(xEndBot));
+      sh.lineTo(xEndTop, top(xEndTop));
+      for (let x = xEndTop - 0.25; x > -xEndTop; x -= 0.25) sh.lineTo(x, top(x));
+      sh.lineTo(-xEndTop, top(-xEndTop));
+      sh.closePath();
+      const geo = new THREE.ExtrudeGeometry(sh, { depth: railT, bevelEnabled: true, bevelThickness: 0.07, bevelSize: 0.07, bevelSegments: 3, curveSegments: 4 });
+      // dark top lip along the upper edge, like the stock rail's top chamfer
+      const lip = new THREE.Shape();
+      lip.moveTo(-xEndTop, top(-xEndTop));
+      for (let x = -xEndTop + 0.25; x < xEndTop; x += 0.25) lip.lineTo(x, top(x));
+      lip.lineTo(xEndTop, top(xEndTop));
+      for (let x = xEndTop - 0.1; x > -xEndTop + 0.1; x -= 0.25) lip.lineTo(x, top(x) - 0.32);
+      lip.closePath();
+      const lipGeo = new THREE.ExtrudeGeometry(lip, { depth: 0.06, bevelEnabled: false });
+      const bm = M(0x15181b, { metalness: 0.5, roughness: 0.5 });
+      [1, -1].forEach(s => {
+        const g = new THREE.Group();
+        g.add(new THREE.Mesh(geo, M(0xa7ab9f, { metalness: 0.6, roughness: 0.35 })));
+        const lipM = new THREE.Mesh(lipGeo, M(0x3a3f44, { metalness: 0.5, roughness: 0.45 }));
+        lipM.position.z = s > 0 ? railT + 0.07 : -0.13; g.add(lipM);
+        const zOut = s > 0 ? railT + 0.1 : -0.1;
+        [-0.6, 0.6].forEach(x => { const b = new THREE.Mesh(zCyl(0.24, 0.12, 20), bm); b.position.set(x, H, zOut); g.add(b); });
+        g.position.z = s > 0 ? railIn : -half;
+        piece("rails", g, [0, 0, 10 * s]);
+      });
+    }
+    // 8/10 Footpads
+    const padGeo = () => {
+      const s = roundRect(new THREE.Shape(), -padLen / 2, -half + 0.05, padLen / 2, half - 0.05, 0.9);
+      const g = new THREE.ExtrudeGeometry(s, { depth: 0.45, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.08, bevelSegments: 2, curveSegments: 6 });
+      g.rotateX(-PI / 2); g.translate(0, -0.225, 0); return g;
+    };
+    [["front", 1], ["rear", -1]].forEach(([id, s]) => {
+      const x = padMid * s;
+      const pm = new THREE.Mesh(padGeo(), [M(0xffffff, { map: gripTex, roughness: 0.95 }), M(0x1e2124, { roughness: 0.8 })]);
+      pm.position.set(x, deckTop(x) - 0.15, 0); pm.rotation.z = slope(x);
+      piece(id, pm, [2.5 * s, 6.2, 0]);
+    });
+    // 9 Sensor
+    {
+      const g = new THREE.Group(), zw = railIn - 0.2;
+      [[zw / 2, 0x2aa198], [-zw / 2, 0xd9822b]].forEach(([z, c]) => {
+        const sm = new THREE.Mesh(new THREE.BoxGeometry(padLen - 0.8, 0.08, zw - 0.15), M(c, { roughness: 0.5 })); sm.position.z = z; g.add(sm);
+      });
+      const tail = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.05, 0.6), M(0xc9a227, { roughness: 0.5 }));
+      tail.position.set(-(padLen / 2) - 0.6, 0, 0); g.add(tail);
+      g.position.set(padMid, deckTop(padMid) - 0.5, 0); g.rotation.z = slope(padMid);
+      piece("sensor", g, [2.5, 3.4, 0]);
+    }
+    // 11/12 Enclosures
+    const encLen = padLen - 0.5, encW = railIn * 2 - 0.1;
+    {
+      const bat = new THREE.Group();
+      bat.add(new THREE.Mesh(new THREE.BoxGeometry(encLen, 1.8, encW), M(0x2e3a40, { metalness: 0.35, roughness: 0.55 })));
+      const rib = M(0x3c4a51, { metalness: 0.35, roughness: 0.5 });
+      [-0.25, 0, 0.25].forEach(f => { const r = new THREE.Mesh(new THREE.BoxGeometry(encLen - 0.8, 0.1, 0.5), rib); r.position.set(0, 0.95, encW * f); bat.add(r); });
+      bat.position.set(padMid, deckTop(padMid) - 0.55 - 0.9, 0); bat.rotation.z = slope(padMid);
+      piece("battery", bat, [3, -7, 0]);
 
-  // tag meshes and collect materials per part
-  const pickables = [];
-  PARTS.forEach(p => {
-    const st = state[p.id];
-    st.group.traverse(o => {
-      if (!o.isMesh) return;
-      o.userData.partId = p.id; pickables.push(o);
-      (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => { if (!st.mats.includes(m)) { m.userData.baseEmissive = m.emissive.clone(); m.userData.baseEI = m.emissiveIntensity; st.mats.push(m); } });
+      const ctl = new THREE.Group();
+      ctl.add(new THREE.Mesh(new THREE.BoxGeometry(encLen, 1.8, encW), M(0x343a40, { metalness: 0.45, roughness: 0.45 })));
+      const fin = M(0x5a636b, { metalness: 0.7, roughness: 0.35 });
+      for (let i = 0; i < 7; i++) { const f = new THREE.Mesh(new THREE.BoxGeometry(encLen - 1, 0.3, 0.14), fin); f.position.set(0, 1.05, -encW / 2 + 0.8 + i * (encW - 1.6) / 6); ctl.add(f); }
+      const port = new THREE.Mesh(zCyl(0.3, 0.2, 16), M(0x111315, {}));
+      port.position.set(-1.0, 0, encW / 2 + 0.1); ctl.add(port);
+      ctl.position.set(-padMid, deckTop(padMid) - 0.55 - 0.9, 0); ctl.rotation.z = slope(-padMid);
+      piece("controller", ctl, [-3, -7, 0]);
+    }
+    // 13 Motor cable
+    {
+      const g = new THREE.Group(), z = railIn - 0.75, endX = -(padIn + 0.2), endY = deckTop(padIn) - 1.4;
+      const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-0.2, H - 0.3, z), new THREE.Vector3(-2.2, H - 0.7, z + 0.1), new THREE.Vector3(endX + 1.4, endY - 0.4, z), new THREE.Vector3(endX + 0.4, endY, z - 0.3)]);
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 40, 0.22, 10, false), M(0x1b1f22, { roughness: 0.6 })));
+      const con = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.0, 20), M(0x8b939a, { metalness: 0.8, roughness: 0.3 }));
+      con.rotation.z = PI / 2; con.position.set(endX - 0.1, endY, z - 0.3); g.add(con);
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.07, 8, 24), M(0xd08a2c, { roughness: 0.5 }));
+      ring.rotation.y = PI / 2; ring.position.set(endX + 0.25, endY, z - 0.3); g.add(ring);
+      piece("cable", g, [-1, -3.5, 4]);
+    }
+    // 14 Bumpers: end cap plus a skid that runs under the enclosure
+    {
+      const x0 = padIn + 0.35, skid = 0.45;
+      const bumperGeo = s => {
+        const P = (x, y) => [x * s, y];
+        const pts = [];
+        for (let x = x0; x <= capIn + 0.001; x += 0.5) pts.push(P(x, encBot(x)));
+        pts.push(P(capIn, encBot(capIn)));
+        pts.push(P(capIn, deckTop(capIn) + 0.02));
+        pts.push(P(L - 0.45, deckTop(capIn) + 0.02));
+        pts.push(P(L - 0.08, deckTop(capIn) - 0.2));
+        pts.push(P(L, deckTop(capIn) - 0.6));
+        pts.push(P(L, encBot(capIn) - 0.1));
+        pts.push(P(L - 0.15, encBot(capIn) - skid + 0.05));
+        pts.push(P(L - 0.6, encBot(capIn) - skid - 0.05));
+        for (let x = capIn - 0.5; x >= x0 + 0.6; x -= 0.5) pts.push(P(x, encBot(x) - skid));
+        pts.push(P(x0 + 0.3, encBot(x0 + 0.3) - skid + 0.1));
+        const sh = new THREE.Shape(pts.map(V2));
+        const g = new THREE.ExtrudeGeometry(sh, { depth: half * 2, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 2 });
+        g.translate(0, 0, -half); return g;
+      };
+      [[1, 0xffffff], [-1, 0xff3b30]].forEach(([s, lc]) => {
+        const g = new THREE.Group();
+        g.add(new THREE.Mesh(bumperGeo(s), M(0x1c1f22, { roughness: 0.85 })));
+        const light = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.35, half * 1.1), new THREE.MeshStandardMaterial({ color: lc, emissive: lc, emissiveIntensity: 0.8 }));
+        light.position.set((L + 0.08) * s, (deckTop(capIn) + encBot(capIn)) / 2 + 0.1, 0); g.add(light);
+        piece("bumpers", g, [4.5 * s, -1.5, 0]);
+      });
+    }
+    // 15 Fender
+    {
+      const fr = R + 0.6, a = Math.acos(Math.min(0.95, (deckTop(padIn) - H + 0.2) / fr));
+      const geo = new THREE.CylinderGeometry(fr, fr, w * 2 + 0.8, 64, 1, true, PI - a, 2 * a); geo.rotateX(PI / 2);
+      const fm = new THREE.Mesh(geo, M(0x3e464c, { roughness: 0.5, side: THREE.DoubleSide }));
+      fm.position.set(0, H, 0); piece("fender", fm, [0, 2 * R + 5.5, 0]);
+    }
+
+    PARTS.forEach(p => {
+      const st = state[p.id];
+      st.group.traverse(o => {
+        if (!o.isMesh) return;
+        o.userData.partId = p.id; pickables.push(o);
+        (Array.isArray(o.material) ? o.material : [o.material]).forEach(mt => { if (!st.mats.includes(mt)) { mt.userData.baseEmissive = mt.emissive.clone(); mt.userData.baseEI = mt.emissiveIntensity; st.mats.push(mt); } });
+      });
     });
-  });
+    placePieces();
+    applyHighlight();
+  }
 
   const ACCENT = new THREE.Color(0x14b3a6);
   applyHighlight = function () {
     PARTS.forEach(p => {
-      const st = state[p.id];
+      const st = state[p.id]; if (!st) return;
       const active = selected ? p.id === selected : inFilter(p);
       const lit = p.id === selected || p.id === hovered;
       st.mats.forEach(m => {
@@ -557,7 +693,6 @@ function init3D() {
       });
     });
   };
-  applyHighlight();
 
   // callouts
   const calloutsEl = document.getElementById("callouts");
@@ -582,12 +717,14 @@ function init3D() {
   const spinBtn = document.getElementById("spin");
   spinBtn.addEventListener("click", () => { controls.autoRotate = !controls.autoRotate; spinBtn.setAttribute("aria-pressed", String(controls.autoRotate)); });
 
+  function placePieces() {
+    root.position.y = 8 * e;
+    PARTS.forEach(p => state[p.id].pieces.forEach(o => o.position.copy(o.userData.base).addScaledVector(o.userData.off, e)));
+  }
+
   const centerY = v => 5 + 11 * v;
   const DIR = new THREE.Vector3(0.62, 0.42, 0.66).normalize();
-  function fitDistance() {
-    const a = camera.aspect || 1.5;
-    return 58 * Math.pow(Math.max(1, 1.45 / a), 0.85);
-  }
+  const fitDistance = () => 58 * Math.pow(Math.max(1, 1.45 / (camera.aspect || 1.5)), 0.85);
   function resetView() {
     controls.target.set(0, centerY(e), 0);
     camera.position.copy(controls.target).addScaledVector(DIR, fitDistance());
@@ -602,7 +739,10 @@ function init3D() {
     camera.aspect = w / h; camera.updateProjectionMatrix();
   }
   new ResizeObserver(resize).observe(viewport);
-  resize(); resetView();
+  resize();
+  rebuild = () => build(model);
+  build(model);
+  resetView();
 
   // picking
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
@@ -651,8 +791,7 @@ function init3D() {
       const dy = centerY(e) - centerY(prev);
       controls.target.y += dy; camera.position.y += dy;
     }
-    root.position.y = 8 * e;
-    PARTS.forEach(p => state[p.id].pieces.forEach(o => o.position.copy(o.userData.base).addScaledVector(o.userData.off, e)));
+    placePieces();
     controls.update();
     renderer.render(scene, camera);
 
