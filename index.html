@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="An interactive exploded 3D view of a Onewheel: what each part does, how it connects, and how to upgrade it. Covers Pint, Pint X, Pint S, XR, GT and GT S-Series.">
+<meta name="description" content="An interactive exploded 3D view of a Onewheel: what each part does, how it connects, and how to upgrade it. Covers Pint, Pint X, Pint S, XR, XR Classic, GT, GT S-Series and GT-S Rally.">
 <title>Onewheel Teardown</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,7 +159,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f
       <ul class="plist" id="plist"></ul>
       <div class="foot">
         <p>A simplified teaching model. Shapes and proportions are approximate and scaled per model. The battery and controller sit at opposite ends under the footpads; which end is which is simplified here. This is not a repair guide, and it is not affiliated with Future Motion.</p>
-        <p>Spec sources: <a href="https://en.wikipedia.org/wiki/Onewheel" target="_blank" rel="noopener">Wikipedia</a>, <a href="https://rideonexperience.com/en/onewheel/" target="_blank" rel="noopener">Ride On Experience</a>, <a href="https://www.longboarderlabs.com/16/onewheel-showdown-pint-s-vs-gt-gt-s-and-xr-classic/2025/10/blog/electric/" target="_blank" rel="noopener">Longboarder Labs</a>, <a href="https://onewheel.com/products/onewheel-gt-s-series-motor" target="_blank" rel="noopener">Future Motion</a>.</p>
+        <p>Spec sources: <a href="https://en.wikipedia.org/wiki/Onewheel" target="_blank" rel="noopener">Wikipedia</a>, <a href="https://rideonexperience.com/en/onewheel/" target="_blank" rel="noopener">Ride On Experience</a>, <a href="https://www.longboarderlabs.com/16/onewheel-showdown-pint-s-vs-gt-gt-s-and-xr-classic/2025/10/blog/electric/" target="_blank" rel="noopener">Longboarder Labs</a>, <a href="https://onewheel.com/products/onewheel-gt-s-series-motor" target="_blank" rel="noopener">Future Motion</a>, <a href="https://gearjunkie.com/technology/onewheel-plus-xr-review" target="_blank" rel="noopener">GearJunkie (+XR)</a>, <a href="https://freshlycharged.com/articles/328/onewheel-xr-classic" target="_blank" rel="noopener">Freshly Charged (XR Classic)</a>, <a href="https://onestopboardshop.com/blogs/news/the-onewheel-gt-s-series-rally-edition" target="_blank" rel="noopener">One Stop Board Shop (Rally)</a>.</p>
       </div>
     </aside>
   </div>
@@ -173,9 +173,11 @@ const MODELS = [
   { id: "pint", name: "Pint", fam: "pint", year: "2019", tireD: 10.5, tireW: 6.0, hub: 6, len: 27, wid: 9.0, range: "6–8 mi", speed: "16 mph", weight: "about 23 lb", volts: "63 V", wheel: "about 10.5 in tire on a 6 in hub" },
   { id: "pintx", name: "Pint X", fam: "pint", year: "2021", tireD: 10.5, tireW: 6.0, hub: 6, len: 27, wid: 9.0, range: "12–18 mi", speed: "18 mph", weight: "about 27 lb", volts: "63 V", wheel: "about 10.5 in tire on a 6 in hub" },
   { id: "pints", name: "Pint S", fam: "pint", year: "2024", tireD: 10.5, tireW: 6.0, hub: 6, len: 27, wid: 9.0, range: "12–18 mi", speed: "20 mph", weight: "about 27 lb", volts: "63 V", wheel: "about 10.5 in tire on a 6 in hub" },
-  { id: "xr", name: "XR", fam: "xr", year: "2018 (+XR), 2024 (XR Classic)", tireD: 11.5, tireW: 6.25, hub: 6, len: 27, wid: 9.5, range: "17–24 mi", speed: "20 mph", weight: "about 30 lb", volts: "75 V", wheel: "about 11.5 in tire on a 6 in hub", note: "Range, speed and weight are for the 2024 XR Classic." },
+  { id: "xr", name: "XR", fam: "xr", full: "Onewheel+ XR", year: "2018", tireD: 11.5, tireW: 6.5, hub: 6, len: 27, wid: 9.5, range: "12–18 mi", speed: "19 mph", weight: "about 27 lb", volts: "Not listed in our sources", wheel: "11.5 × 6.5 in tire on a 6 in hub" },
+  { id: "xrc", name: "XR Classic", fam: "xr", year: "2024", tireD: 11.5, tireW: 6.5, hub: 6, len: 27, wid: 9.5, drop: 0.24, range: "17–24 mi", speed: "20 mph", weight: "about 30 lb", volts: "75 V", wheel: "6 in Performance Treaded tire on a 6 in hub", note: "Compared with the original XR: second-generation 6 in Hypercore motor, 75 V battery, about 30% more range, and a raised axle mount that drops ride height about 6 mm." },
   { id: "gt", name: "GT", fam: "gt", year: "2021", tireD: 11.5, tireW: 6.5, hub: 6.5, len: 29.5, wid: 9.5, range: "20–32 mi", speed: "20 mph", weight: "about 35 lb", volts: "75 V", wheel: "11.5 × 6.5–6.5 tire on a 6.5 in hub" },
-  { id: "gts", name: "GT-S", fam: "gt", full: "GT S-Series", year: "2023", tireD: 11.5, tireW: 6.5, hub: 6.5, len: 29.5, wid: 9.5, range: "16–25 mi", speed: "25 mph", weight: "about 33 lb", volts: "113 V", wheel: "11.5 in tire on a 6.5 in hub (6 in on the Rally Edition)" }
+  { id: "gts", name: "GT-S", fam: "gt", full: "GT S-Series", year: "2023", tireD: 11.5, tireW: 6.5, hub: 6.5, len: 29.5, wid: 9.5, range: "16–25 mi", speed: "25 mph", weight: "about 33 lb", volts: "113 V", wheel: "11.5 in tire on a 6.5 in hub" },
+  { id: "rally", name: "GT-S Rally", fam: "gt", full: "GT S-Series Rally Edition", year: "2024", tireD: 11.5, tireW: 6.5, hub: 6, len: 29.5, wid: 9.5, riseF: 1.0, riseR: 0.65, padT: 0.3, drop: 0.2, range: "up to about 25 mi", speed: "25 mph", weight: "lighter than the GT (exact figure not confirmed)", volts: "113 V", wheel: "6 in GT Performance Treaded tire with thicker sidewalls, on a 6 in hub", note: "Built for trails: a smaller 6 in hub with a taller tire sidewall for more cushion, curved asymmetric Recurve rails for leverage and clearance, and slim Lowboy footpads for a lower ride height." }
 ];
 const MODEL_BY_ID = Object.fromEntries(MODELS.map(m => [m.id, m]));
 
@@ -190,16 +192,21 @@ const PARTS = [
     upgrades_pint: ["Pint tires fit the 6 in Pint hub. Aftermarket makers such as TFL list Pint versions of tires like the ThunderCat and Street Pro 2.", COMPOUNDS],
     upgrades_xr: ["The 6 in XR hub has the widest aftermarket choice: Burris treaded and slick, Vega, and TFL (Enduro, ThunderCat, Street Pro 2), among others.", COMPOUNDS],
     upgrades_gt: ["FM GT Performance Treaded (7 in wide, soft) and Performance Slick (6.5 in).", "TFL Pioneer (6.9 in, deep siped tread), ThunderCat (6.75 in), and Enduro and Street Pro 2 (6.5 in).", COMPOUNDS],
+    upgrades_rally: ["The Rally uses a 6 in hub, so 6.5 in GT tires do not fit. Choose tires listed for 6 in hubs; some makers list Rally fitment separately.", COMPOUNDS],
+    upgrades_xrc: ["Ships with a 6 in Performance Treaded tire.", "The 6 in hub takes the wide XR aftermarket: Burris, Vega, and TFL (Enduro, ThunderCat, Street Pro 2), among others.", COMPOUNDS],
     diy: ["Hard", "The motor comes off the board and the hub is taken apart. Many riders pay a shop."],
     tip: "For a more stable feel, choose a wider tire with a flatter center, a soft compound, and lower pressure. Higher pressure and rounder shoulders feel carvier.",
-    tip_gt: "For a more stable feel, choose a wider tire with a flatter center, a soft compound, and lower pressure. The GT's 6.5 in hub is a size only Future Motion uses, so XR tires do not fit a stock GT hub." },
+    tip_gt: "For a more stable feel, choose a wider tire with a flatter center, a soft compound, and lower pressure. The GT's 6.5 in hub is a size only Future Motion uses, so XR tires do not fit a stock GT hub.",
+    tip_rally: "For a more stable feel, choose a wider tire with a flatter center, a soft compound, and lower pressure. The Rally's taller tire sidewall is part of how it smooths out rough trails." },
   { id: "hub", name: "Hub motor", short: "The wheel is the motor", tags: ["elec"],
     what: "A Onewheel uses a hub motor: the wheel itself is the motor. The outer shell carries a ring of permanent magnets and spins around the stator, which stays still. The shell is also the rim the tire mounts on.",
     connects: "Spins on two bearings around the fixed axle. The motor's wires leave through the axle to the controller.",
     upgrades_pint: ["Few drop-in motor upgrades exist for the Pint family. Bigger motor changes usually go with a VESC conversion."],
-    upgrades_xr: ["Future Motion lists the 6 in GT S-Series motor as compatible with the XR Classic.", "The Superflux is a popular aftermarket XR motor; fitting it takes some wiring work."],
+    upgrades_xr: ["The Superflux is a popular aftermarket XR motor; fitting it takes some wiring work.", "Future Motion lists its 6 in GT S-Series motor for the XR Classic, not the original XR."],
+    upgrades_xrc: ["Ships with the second-generation 6 in Hypercore motor.", "Future Motion lists the 6 in GT S-Series motor as compatible with the XR Classic."],
     upgrades_gt: ["The GT S-Series motor fits the standard GT, according to Future Motion: more low-end torque and better heat handling.", "Aftermarket motors such as the Superflux need custom wiring or a VESC controller."],
-    upgrades_gts: ["The S-Series motor is stock. Future Motion also sells a 6 in version (used on the Rally Edition) for a taller tire sidewall and more cushion."],
+    upgrades_gts: ["The S-Series motor is stock. Future Motion also sells a 6 in version for a taller tire sidewall and more cushion; the Rally Edition ships with it."],
+    upgrades_rally: ["The 6 in S-Series motor is stock. Future Motion also sells the 6.5 in version, which takes standard GT tires."],
     diy: ["Moderate", "Swapping a complete motor is unplug, unbolt, bolt in. Opening a motor is shop work."],
     tip_gt: "Buying a tire already mounted on a spare motor skips the tire-mounting job entirely." },
   { id: "stator", name: "Stator and windings", short: "The motor's stationary half", tags: ["elec"],
@@ -224,6 +231,7 @@ const PARTS = [
     connects: "Sit inside the rails and clamp the axle. Bolts through the rail hold them.",
     upgrades_pint: ["Aftermarket lift and lowering blocks exist for the Pint family. Check the listing for your exact model."],
     upgrades_xr: ["Offset blocks such as Half & Half lift or lower the board about 0.5 in."],
+    upgrades_xrc: ["The XR Classic already uses a raised axle mount that lowers ride height about 6 mm.", "Offset blocks such as Half & Half lift or lower XR boards about 0.5 in. Check XR Classic fit."],
     upgrades_gt: ["Land-Surf VRH (GT/GT-S): 7 positions about 7 mm apart, from about 1 in lower to 0.5 in higher than stock.", "Offset lift and lowering blocks from several makers. Check GT fit."],
     diy: ["Easy", "A few bolts, with the board supported."],
     tip: "A lower board means a lower center of gravity and a less tippy feel. The trade-off is less clearance, so the rails and nose scrape sooner in hard carves." },
@@ -233,12 +241,14 @@ const PARTS = [
     upgrades_pint: ["Aftermarket Pint rails exist, mostly for strength or to fit a larger tire."],
     upgrades_xr: ["Many aftermarket XR rails, including lowered and extended designs. Extended rails make room for bigger tires."],
     upgrades_gt: ["Homebrew WTF rails (GT/GT-S): about 0.5 in lower at your feet without losing clearance.", "WTF Low Rider: lower still.", "Other aftermarket rails trade off strength, weight, looks and clearance."],
+    upgrades_rally: ["Stock Recurve rails are curved and asymmetric, for more leverage and clearance on steep, rough ground.", "Aftermarket GT/GT-S rails exist. Check fit with the Rally's 6 in hub and tire before buying."],
     diy: ["Moderate", "The whole board comes apart. Plan a careful afternoon."] },
   { id: "front", name: "Front footpad", short: "Grip and sensor for your front foot", tags: ["ride"],
     what: "Where your front foot goes. It holds the rider sensor. Its shape (concave, width, grip) decides how locked-in your foot feels when the board hits something.",
     what_pint: "Where your front foot goes. Pint models call it the MagicPad, and it holds the rider sensor. Its shape (concave, width, grip) decides how locked-in your foot feels when the board hits something.",
     connects: "Bolts to the rails above one enclosure. The sensor cable runs to the controller.",
     upgrades: ["Concave or wider pads (Kush and similar) for a more locked-in foot.", "A replacement pad must include or accept a sensor that works with your model."],
+    upgrades_rally: ["Stock Lowboy footpads are slimmer, for a lower ride height.", "Concave or wider aftermarket pads; a front pad must work with the GT-S sensor."],
     diy: ["Easy", "Mostly bolts; route the sensor cable carefully."] },
   { id: "sensor", name: "Footpad sensor", short: "The board's on switch for riding", tags: ["elec", "wear"],
     what: "A pressure sensor split into two zones, heel side and toe side. With your foot on it, the board can balance. Lift your heel off and the board disengages, which is how you dismount.",
@@ -250,6 +260,7 @@ const PARTS = [
     what: "Grip and foot position for your back foot. It has no sensor. Its shape and any kicktail change your leverage for braking and carving.",
     connects: "Bolts to the rails above the other enclosure.",
     upgrades: ["Concave, kicktail or wider aftermarket pads."],
+    upgrades_rally: ["Stock Lowboy footpads are slimmer, for a lower ride height.", "Concave, kicktail or wider aftermarket pads."],
     diy: ["Easy", "A few bolts."] },
   { id: "battery", name: "Battery", short: "Range and power", tags: ["elec"],
     what: "A lithium-ion pack with a battery management system (BMS) that protects the cells while charging and riding. It sets your range and how much power the motor has to work with.",
@@ -465,10 +476,12 @@ function init3D() {
     // Dimensions (inches)
     const R = m.tireD / 2, H = R, hubR = m.hub / 2, w = m.tireW / 2, L = m.len / 2;
     const half = m.wid / 2, railT = 0.45, railIn = half - railT;
-    const k = 0.4 / ((L - 1) * (L - 1));
-    const deckTop = x => H + 1.9 + k * x * x;
+    const kF = (m.riseF ?? 0.4) / ((L - 1) * (L - 1)), kR = (m.riseR ?? 0.4) / ((L - 1) * (L - 1));
+    const kAt = x => (x >= 0 ? kF : kR);
+    const padT = m.padT ?? 0.45;
+    const deckTop = x => H + 1.9 - (m.drop || 0) + kAt(x) * x * x;
     const encBot = x => deckTop(x) - 2.45;
-    const slope = x => Math.atan(2 * k * x);
+    const slope = x => Math.atan(2 * kAt(x) * x);
     const capIn = L - 1.1;
     const padIn = Math.sqrt(Math.max(0, R * R - 2.6)) + 0.8;
     const padLen = capIn - padIn, padMid = (capIn + padIn) / 2;
@@ -580,13 +593,13 @@ function init3D() {
     // 8/10 Footpads
     const padGeo = () => {
       const s = roundRect(new THREE.Shape(), -padLen / 2, -half + 0.05, padLen / 2, half - 0.05, 0.9);
-      const g = new THREE.ExtrudeGeometry(s, { depth: 0.45, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.08, bevelSegments: 2, curveSegments: 6 });
-      g.rotateX(-PI / 2); g.translate(0, -0.225, 0); return g;
+      const g = new THREE.ExtrudeGeometry(s, { depth: padT, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.08, bevelSegments: 2, curveSegments: 6 });
+      g.rotateX(-PI / 2); g.translate(0, -padT / 2, 0); return g;
     };
     [["front", 1], ["rear", -1]].forEach(([id, s]) => {
       const x = padMid * s;
       const pm = new THREE.Mesh(padGeo(), [M(0xffffff, { map: gripTex, roughness: 0.95 }), M(0x1e2124, { roughness: 0.8 })]);
-      pm.position.set(x, deckTop(x) - 0.15, 0); pm.rotation.z = slope(x);
+      pm.position.set(x, deckTop(x) + 0.075 - padT / 2, 0); pm.rotation.z = slope(x);
       piece(id, pm, [2.5 * s, 6.2, 0]);
     });
     // 9 Sensor

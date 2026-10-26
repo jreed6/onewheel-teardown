@@ -6,9 +6,10 @@ upgrade or replacement options.
 
 **Live page:** https://jreed6.github.io/onewheel-teardown/
 
-- Models: Pint, Pint X, Pint S, XR, GT and GT S-Series. Picking a model
+- Models: Pint, Pint X, Pint S, XR, XR Classic, GT, GT S-Series and GT-S
+  Rally. Picking a model
   rescales the wheel, hub and deck, and updates its specs and upgrade notes.
-  Link straight to a model with a hash, for example `#pintx` or `#gts`.
+  Link straight to a model with a hash, for example `#pintx`, `#xrc` or `#rally`.
 - Single static page (`index.html`) built with [three.js](https://threejs.org/)
   r128, loaded from a CDN. No build step; open `index.html` in a browser to
   run it locally.
